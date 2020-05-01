@@ -10,17 +10,16 @@ template <typename STyp, int SWymiar>
 class SWektor {
     STyp  _Wsp[SWymiar];
   public:
-    SWektor() { /*for (STyp &Wsp: _Wsp) Wsp = 0;*/ }
+    SWektor() { /*for (STyp &Wsp: _Wsp) Wsp = 0; */}
 
     STyp  operator [] (unsigned int Ind) const { return _Wsp[Ind]; }
     STyp &operator [] (unsigned int Ind)       { return _Wsp[Ind]; }
 
     SWektor<STyp,SWymiar> operator - (const SWektor<STyp,SWymiar> &Odjemnik) const;
     SWektor<STyp,SWymiar> operator + (const SWektor<STyp,SWymiar> &Wek) const;
-    STyp operator * ( SWektor<STyp,SWymiar> &Wek) const;
+    STyp operator * (const SWektor<STyp,SWymiar> &Wek) const;
     SWektor<STyp,SWymiar> operator * (double Mnoznik) const;
     SWektor<STyp,SWymiar> operator / (double Dzielnik) const;
-    SWektor<STyp,SWymiar> operator = (double liczba) const;
     bool operator == (const SWektor<STyp,SWymiar> &Wek) const;
     bool operator != (const SWektor<STyp,SWymiar> &Wek) const;
 };
@@ -51,7 +50,7 @@ SWektor<STyp,SWymiar> SWektor<STyp,SWymiar>::operator - (const SWektor<STyp,SWym
 
 ///MNOZENIE WEKTOROW
 template <typename STyp, int SWymiar>
-STyp SWektor<STyp,SWymiar>::operator * ( SWektor<STyp,SWymiar> &Wek) const
+STyp SWektor<STyp,SWymiar>::operator * (const SWektor<STyp,SWymiar> &Wek) const
 {
   STyp  Wynik,iloczyn;
   Wynik=0;
@@ -96,6 +95,8 @@ SWektor<STyp,SWymiar> SWektor<STyp,SWymiar>::operator / (double Dzielnik) const
         std::cerr <<"Nie dzielimy przez zero";
     }
 }
+
+
 
 ///ROWNOSC WEKTOROW
 template <typename STyp, int SWymiar>
