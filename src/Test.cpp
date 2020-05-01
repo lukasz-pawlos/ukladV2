@@ -103,3 +103,80 @@ void Test_SzablonWektor_LZespolona()
        << "        " << W/2 << endl
        << endl;
 }
+
+
+void Test_Macierz_Double()
+{
+
+     cout << endl
+       << " --------- Test klasy Macierz<double," << ROZMIAR << "> ----------" << endl
+       << endl;
+
+
+  Macierz<double,ROZMIAR>    A,B;
+
+    SWektor<double,ROZMIAR>    X,Z;
+
+  for (unsigned int Ind = 0; Ind < ROZMIAR; ++Ind) {
+    X[Ind] = Ind;
+    Z[Ind] = 3;
+  }
+
+  for (unsigned int Ind = 0; Ind < ROZMIAR; ++Ind) {
+    A[Ind]=X;
+    B[Ind]=Z;
+  }
+cout <<"MACIERZ A"<< A;
+cout <<"MACIERZ B"<< B;
+
+cout<<"DODAWANIE A+B"<<A+B;
+cout<<"ODEJMOWANIE A-B"<<A-B;
+cout<<"MNOZENIE A*B"<<A*B;
+cout<<"MNOZENIE A*2"<<A*2;
+cout<<"MNOZENIE A/2"<<A/2;
+
+
+}
+
+
+void Test_Macierz_LZespolona()
+{
+
+      cout << endl
+       << " --------- Test klasy Macierz<LZespolona," << ROZMIAR << "> ----------" << endl
+       << endl;
+
+  SWektor<LZespolona,ROZMIAR>    X,Z;
+  Macierz<LZespolona,ROZMIAR>  A,B;
+
+  for (unsigned int Ind = 0; Ind < ROZMIAR; ++Ind) {
+    X[Ind].re = Ind;      X[Ind].im = Ind;
+    Z[Ind].re = 3;      Z[Ind].im = 3;
+}
+
+  for (unsigned int Ind = 0; Ind < ROZMIAR; ++Ind)
+  {
+    A[Ind]=X;
+    B[Ind]=Z;
+  }
+
+
+
+cout <<"MACIERZ A"<< A;
+cout <<"MACIERZ B"<< B;
+
+cout<<"DODAWANIE A+B"<<A+B;
+cout<<"ODEJMOWANIE A-B"<<A-B;
+cout<<"MNOZENIE A*B"<<A*B;
+cout<<"MNOZENIE A*2"<<A*2;
+cout<<"MNOZENIE A/2"<<A/2;
+
+
+
+}
+
+
+
+
+
+
