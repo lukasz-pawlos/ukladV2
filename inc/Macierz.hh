@@ -185,7 +185,8 @@ template <typename STyp, int SWymiar>
 SWektor <STyp,SWymiar> SMacierz <STyp,SWymiar>::operator * (const SWektor<STyp,SWymiar> &Wek) const
 {
     SWektor<STyp,SWymiar> Wynik;
-    STyp pom=0;
+    STyp pom;
+    pom=0;
 
     for (int i = 0; i < SWymiar; ++i) Wynik[i]=0;
 

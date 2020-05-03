@@ -127,25 +127,11 @@ SWektor<STyp,SWymiar> UkladRownanLiniowych<STyp,SWymiar>::obliczuklad ()
 template <typename STyp, int SWymiar>
 SWektor<STyp, SWymiar> UkladRownanLiniowych<STyp, SWymiar>::wekbl(SWektor<STyp, SWymiar> zz)
 {
-    STyp b;
-    b = 0;
-    SWektor<STyp, SWymiar> X;
-    SMacierz<STyp, SWymiar> B = mac;
+    zz= mac*zz;
+    std::cout << wek;
+    std::cout << zz;
 
-    for(int i = 0; i<SWymiar; ++i) //Petle wymnazajace macierz wspolczynnikow i wektor rozwiazan
-    {
-        for(int j = 0; j<SWymiar; ++j)
-        {
-
-            b = b + (B(i,j)*zz[j]); //Mnozenie kolejnych elemntow wdlg. algorytmu mnozenia macierzy
-
-        }
-
-        X[i] = b; //Wrzucanie gotowych wartosci do nowego wektora
-        b = 0;
-    }
-
-    return X - wek; //Od nowego wektora odejmujemy wektor wyrazow wolnych
+    return zz - wek; //Od nowego wektora odejmujemy wektor wyrazow wolnych
 }
 
 ///ROZWIAZANIE
