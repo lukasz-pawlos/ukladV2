@@ -123,7 +123,18 @@ bool SWektor<STyp,SWymiar>::operator != (const SWektor<STyp,SWymiar> &Wek) const
 }
 
 
-
+///Wczytywanie wartosci pod atrybuty danego obiektu typu 'Wektor'
+template <typename STyp, int SWymiar>
+std::istream& operator >> (std::istream &Strm, SWektor<STyp, SWymiar> &Wek)
+{
+    STyp lacznik;
+    for(int i=0; i<SWymiar; ++i) //Petla potrzebna do zapelnienia komorek tablicy obiektu
+    {
+        Strm >> lacznik;
+        Wek[i]=lacznik; //Metoda klasy 'wektor' wprowadzajaca wartosci do obiektu
+    }
+    return Strm;
+}
 
 
 template <typename STyp, int SWymiar>

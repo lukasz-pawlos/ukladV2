@@ -18,7 +18,7 @@ struct  LZespolona {
   double   re;    /*! Pole repezentuje czesc rzeczywista. */
   double   im;    /*! Pole repezentuje czesc urojona. */
 
-  LZespolona &operator = (double  Liczba);
+LZespolona operator = (double  Liczba);
 
 };
 
@@ -42,5 +42,6 @@ double  modul (LZespolona Skl);
 
 
 std::ostream &operator << (std::ostream &StrmWyj, LZespolona  Zesp);
+std::istream& operator >> (std::istream& StrWej, LZespolona& liczba);
 
 #endif

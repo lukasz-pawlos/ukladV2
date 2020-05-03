@@ -1,8 +1,9 @@
-//#ifndef MACIERZ_HH
+#ifndef MACIERZ_HH
 #define MACIERZ_HH
 
 #include "SWektor.hh"
 #include "rozmiar.h"
+#include "LZespolona.hh"
 #include <iostream>
 
 
@@ -11,7 +12,7 @@
 
 
 template <typename STyp, int SWymiar>
-class Macierz {
+class SMacierz {
     SWektor<STyp,SWymiar> tab[SWymiar];
 
 public:
@@ -24,25 +25,38 @@ public:
 
     void Transpozycja();
     void Zeruj();
-    double det();
+    STyp det();
 
-    Macierz<STyp,SWymiar> operator + (const Macierz<STyp,SWymiar> &Mac)const;
-    Macierz<STyp,SWymiar> operator - (const Macierz<STyp,SWymiar> &Mac)const;
-    Macierz<STyp,SWymiar> operator * (const Macierz<STyp,SWymiar> &Mac)const;
-    Macierz<STyp,SWymiar> operator * (double iloczyn)const;
+    SMacierz<STyp,SWymiar> operator + (const SMacierz<STyp,SWymiar> &Mac)const;
+    SMacierz<STyp,SWymiar> operator - (const SMacierz<STyp,SWymiar> &Mac)const;
+    SMacierz<STyp,SWymiar> operator * (const SMacierz<STyp,SWymiar> &Mac)const;
+    SMacierz<STyp,SWymiar> operator * (double iloczyn)const;
     SWektor<STyp,SWymiar> operator * (const SWektor<STyp,SWymiar> &Wek)const;
-    Macierz<STyp,SWymiar> operator / (double dzielnik)const;
-    bool operator == (const Macierz &Mac);
-    bool operator != (const Macierz &Mac);
+    SMacierz<STyp,SWymiar> operator / (double dzielnik)const;
+    bool operator == (const SMacierz &Mac);
+    bool operator != (const SMacierz &Mac);
 
 };
 
-/*template <typename STyp, int SWymiar>
-std::istream& operator >> (std::istream &StrmWyj, Macierz &Mac);*/
-
-
+///WCZYTYWANIE MACIERZY
 template <typename STyp, int SWymiar>
-std::ostream& operator << (std::ostream &StrWyj,const Macierz<STyp,SWymiar> &Mac)
+std::istream& operator >> (std::istream &StrmWyj, SMacierz<STyp,SWymiar> &Mac)
+{
+
+
+    SWektor<STyp, SWymiar> lacznik;
+    for(int i = 0; i<SWymiar; ++i) //Petla wczytujaca wektory do klasy
+    {
+        StrmWyj >> lacznik;
+        Mac[i]=lacznik; //Wektor przekazywany za pomoca metody
+    }
+    return StrmWyj;
+}
+
+
+///WYPISYWANIE MACIERZY
+template <typename STyp, int SWymiar>
+std::ostream& operator << (std::ostream &StrWyj,const SMacierz<STyp,SWymiar> &Mac)
 {
     StrWyj << std::endl;
     for(int i = 0; i<ROZMIAR; i++)
@@ -52,8 +66,10 @@ std::ostream& operator << (std::ostream &StrWyj,const Macierz<STyp,SWymiar> &Mac
     return StrWyj;
 }
 
+
+///ZEROWANIE MACIERZY
 template <typename STyp, int SWymiar>
-void Macierz<STyp,SWymiar>::Zeruj()
+void SMacierz<STyp,SWymiar>::Zeruj()
 {
     SWektor<STyp,SWymiar> ZERO;
     for (int i = 0; i < SWymiar; ++i) ZERO[i]=0;
@@ -66,10 +82,10 @@ void Macierz<STyp,SWymiar>::Zeruj()
 
 ///Transpozycja uzyta do mnozenia
 template <typename STyp, int SWymiar>
-void Macierz<STyp,SWymiar>::Transpozycja()
+void SMacierz<STyp,SWymiar>::Transpozycja()
 {
     SWektor<STyp,SWymiar> C, D;
-    Macierz<STyp,SWymiar> Z;
+    SMacierz<STyp,SWymiar> Z;
 
     for(int i=0; i<ROZMIAR; ++i)
     {
@@ -86,20 +102,27 @@ void Macierz<STyp,SWymiar>::Transpozycja()
         (*this)[i]=Z[i];
     }
 }
+
+///WYZNACZNIK
 template <typename STyp, int SWymiar>
-double Macierz<STyp,SWymiar>::det()
+STyp SMacierz<STyp,SWymiar>::det()
 {
-    Macierz<STyp,SWymiar> mac = (*this);
-    STyp elem = 0, wynik = 1;
+    SMacierz<STyp,SWymiar> mac = (*this);
+
+    STyp elem;
+    STyp wynik;
+
+    elem=0;
+    wynik=1;
 
     for (int i = 0; i<ROZMIAR-1; i++)
     {
         for (int j = i+1; j<ROZMIAR; j++)
         {
-            elem = -mac.tab[j][i]/mac.tab[i][i];
+            elem = mac.tab[j][i]/mac.tab[i][i]*(-1);
             for (int k = i; k<=ROZMIAR; k++)
             {
-                mac.tab[j][k]+=(elem*mac.tab[i][k]);
+                mac.tab[j][k]=mac.tab[j][k]+(elem*mac.tab[i][k]);
             }
         }
     }
@@ -112,11 +135,11 @@ double Macierz<STyp,SWymiar>::det()
     return wynik;
 }
 
-
+///DODAWANIE MACIERZY
 template <typename STyp, int SWymiar>
-Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>:: operator + (const Macierz<STyp,SWymiar> &Mac)const
+SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>:: operator + (const SMacierz<STyp,SWymiar> &Mac)const
 {
-    Macierz<STyp,SWymiar> Wynik;
+    SMacierz<STyp,SWymiar> Wynik;
     Wynik.Zeruj();
     for (int i=0; i<ROZMIAR; i++)
     {
@@ -124,11 +147,11 @@ Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>:: operator + (const Macierz<STyp,SWy
     }
     return Wynik;
 }
-
+///ODEJMOWANIE MACIERZY
 template <typename STyp, int SWymiar>
-Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>:: operator - (const Macierz<STyp,SWymiar> &Mac)const
+SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>:: operator - (const SMacierz<STyp,SWymiar> &Mac)const
 {
-    Macierz<STyp,SWymiar> Wynik;
+    SMacierz<STyp,SWymiar> Wynik;
     Wynik.Zeruj();
     for (int i=0; i<ROZMIAR; i++)
     {
@@ -138,11 +161,11 @@ Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>:: operator - (const Macierz<STyp,SWy
 }
 
 
-///Mnozenie dwoch macierzy
+///MNOZENIE MACIERZY
 template <typename STyp, int SWymiar>
-Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>::operator * (const Macierz<STyp,SWymiar> &Mac)const
+SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator * (const SMacierz<STyp,SWymiar> &Mac)const
 {
-    Macierz<STyp,SWymiar> Wynik,Mnoznik;
+    SMacierz<STyp,SWymiar> Wynik,Mnoznik;
     SWektor<STyp,SWymiar> Wek[ROZMIAR];
     Mnoznik = Mac;
     Mnoznik.Transpozycja();
@@ -157,9 +180,9 @@ Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>::operator * (const Macierz<STyp,SWym
     return Wynik;
 }
 
-
+///MNOZENIE MACIERZY PRZEZ WEKTOR
 template <typename STyp, int SWymiar>
-SWektor<STyp,SWymiar> Macierz<STyp,SWymiar>::operator * (const SWektor<STyp,SWymiar> &Wek) const
+SWektor <STyp,SWymiar> SMacierz <STyp,SWymiar>::operator * (const SWektor<STyp,SWymiar> &Wek) const
 {
     SWektor<STyp,SWymiar> Wynik;
     STyp pom=0;
@@ -174,10 +197,11 @@ SWektor<STyp,SWymiar> Macierz<STyp,SWymiar>::operator * (const SWektor<STyp,SWym
     return Wynik;
 }
 
+///MNOZENIE MACIERZY PRZEZ LICZBE
 template <typename STyp, int SWymiar>
-Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>::operator * (double iloczyn)const
+SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator * (double iloczyn)const
 {
-    Macierz<STyp,SWymiar> Wynik;
+    SMacierz<STyp,SWymiar> Wynik;
     Wynik.Zeruj();
 
     for (int i=0; i<ROZMIAR; i++)
@@ -187,10 +211,12 @@ Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>::operator * (double iloczyn)const
     return Wynik;
 }
 
+
+///DZIELENIE MACIERZY PRZEZ LICZBE
 template <typename STyp, int SWymiar>
-Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>::operator / (double dzielnik)const
+SMacierz<STyp,SWymiar> SMacierz<STyp,SWymiar>::operator / (double dzielnik)const
 {
-    Macierz<STyp,SWymiar> Wynik;
+    SMacierz<STyp,SWymiar> Wynik;
     Wynik.Zeruj();
 
     if (dzielnik !=0)
@@ -207,9 +233,9 @@ Macierz<STyp,SWymiar> Macierz<STyp,SWymiar>::operator / (double dzielnik)const
     }
 }
 
-
+///ROWNOSC MACIERZY
 template <typename STyp, int SWymiar>
-bool Macierz<STyp,SWymiar>::operator == (const Macierz<STyp,SWymiar> &Mac)
+bool SMacierz<STyp,SWymiar>::operator == (const SMacierz<STyp,SWymiar> &Mac)
 {
     for (int i=0; i<ROZMIAR; i++)
     {
@@ -219,8 +245,10 @@ bool Macierz<STyp,SWymiar>::operator == (const Macierz<STyp,SWymiar> &Mac)
     return true;
 }
 
+
+///NIEROWNOSC MACIERZY
 template <typename STyp, int SWymiar>
-bool Macierz<STyp,SWymiar>::operator != (const Macierz<STyp,SWymiar> &Mac)
+bool SMacierz<STyp,SWymiar>::operator != (const SMacierz<STyp,SWymiar> &Mac)
 {
     for (int i=0; i<ROZMIAR; i++)
     {
@@ -229,4 +257,4 @@ bool Macierz<STyp,SWymiar>::operator != (const Macierz<STyp,SWymiar> &Mac)
     }
     return true;
 }
-
+#endif
