@@ -9,7 +9,7 @@ using namespace std;
  * Powoduje to, że w części urojonej zostanie automatycznie podstawiona
  * wartość 0.
  */
-LZespolona &LZespolona::operator = (double  Liczba)
+LZespolona LZespolona::operator = (double  Liczba)
 {
   this->re = Liczba; this->im = 0;
   return *this;
@@ -133,4 +133,46 @@ bool operator != (LZespolona Skl1, LZespolona Skl2)
 ostream &operator << (ostream &StrmWyj, LZespolona  Zesp)
 {
   return StrmWyj << '(' << Zesp.re << showpos << Zesp.im << "i)" << noshowpos;
+}
+
+istream& operator >> (istream& StrWej, LZespolona& liczba)
+{
+	char tmp;
+
+	StrWej >> tmp;
+	if  (tmp != '(')
+	{
+		StrWej.setstate(ios::failbit);
+		return StrWej;
+	}
+
+	StrWej >> liczba.re;
+	if (!StrWej)
+	{
+		StrWej.setstate(ios::failbit);
+		return StrWej;
+	}
+
+	StrWej >> liczba.im;
+	if (!StrWej)
+	{
+		StrWej.setstate(ios::failbit);
+		return StrWej;
+	}
+
+	StrWej >> tmp;
+	if  (tmp != 'i')
+	{
+        	StrWej.setstate(ios::failbit);
+		return StrWej;
+	}
+
+	StrWej >> tmp;
+	if  (tmp != ')')
+	{
+		StrWej.setstate(ios::failbit);
+		return StrWej;
+	}
+
+	return StrWej;
 }
