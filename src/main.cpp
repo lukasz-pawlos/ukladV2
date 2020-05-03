@@ -1,5 +1,5 @@
 #include <iostream>
-#include "sWektor.hh"
+#include "SWektor.hh"
 #include "Macierz.hh"
 #include "UkladRownan.hh"
 #include "rozmiar.h"
